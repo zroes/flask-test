@@ -10,7 +10,8 @@ def hello():
         print('Incoming..')
         # print(request.get_json())  # parse as JSON
         query = request.get_json()['query']
-        results = scrape.getData(query)
+        includes = request.get_json()['includes']
+        results = scrape.getData(query, includes)
         return jsonify(results), 200
 
     # GET request

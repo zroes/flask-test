@@ -9,7 +9,7 @@ from selenium.webdriver.common.by import By
 
 # headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.82 Safari/537.36'}
 
-searchResults = []
+# searchResults = []
 
 def tj_search(query):
   baseurl = 'https://www.traderjoes.com/'
@@ -93,6 +93,42 @@ def wf_search(query):
     }
     searchResults.append(dict)
 
+def safeway_search(query):
+  baseurl = 'https://www.safeway.com/'
+  url = f'{baseurl}shop/search-results.html?q={query}'
+  response = selenium_render_page(url)
+
+  soup = bs(response, 'html.parser')
+  results = soup.find_all(class_='product-card-container')
+
+  for item in results[:10]:
+    dict = {
+      'name': item.find(class_='product-item-title-tooltip__inner').text.split(' - ')[0]
+      if item.find(class_='product-item-title-tooltip__inner') 
+      else item.find(class_='product-title__name').text.split(' - ')[0],
+      'price': float(item.find(class_='product-price__saleprice').text.split('Y')[0][1:]),
+      'size': item.find(class_='product-title__name').text.split(' - ')[-1],
+      'store': 'Safeway'
+    }
+    searchResults.append(dict)
+
+def tc_search(query):
+  baseurl = 'https://townandcountrymarkets.com/'
+  url = f'{baseurl}shop#!/?search_option_id=product&q={query}'
+  response = selenium_render_page(url)
+  # print(response)
+  soup = bs(response, 'html.parser')
+  results = soup.find_all(class_='fp-item-content')
+
+  for item in results[:10]:
+    dict = {
+      'name': item.find(class_='fp-item-name').text[1:-1],
+      'price': float(item.find(class_='fp-item-base-price').text[1:]),
+      'size': item.find(class_='fp-item-size').text,
+      'store': 'Town and Country'
+    }
+    searchResults.append(dict)
+
 
 def selenium_render_page(url, from_wf=False):
   # chrome_options = Options()
@@ -119,21 +155,37 @@ def selenium_render_page(url, from_wf=False):
     modal.find_element(By.CLASS_NAME, 'w-makethismystore').click()
     sleep(0.1)
     driver.switch_to.alert.dismiss();
-  sleep(3)
+  sleep(3.5)
   r = driver.page_source
   return r
 
 
-def getData(query):
+def getData(query, includes):
+  # includes = {
+  #   'tj': False,
+  #   'ab' : True,
+  #   'fm': True,
+  #   'wf': True,
+  #   'sf': False
+  # }
   threads = []
   global searchResults
   searchResults = []
   # query = query.replace(' ', '%20')
   print(query)
-  threads.append(Thread(target=lambda: tj_search(query)))
-  threads.append(Thread(target=lambda: albert_search(query)))
-  threads.append(Thread(target=lambda: meyer_search(query)))
-  threads.append(Thread(target=lambda: wf_search(query)))
+  if includes['tj']:
+    threads.append(Thread(target=lambda: tj_search(query)))
+  if includes['ab']:
+    threads.append(Thread(target=lambda: albert_search(query)))
+  if includes['fm']:
+    threads.append(Thread(target=lambda: meyer_search(query)))
+  if includes['wf']:
+    threads.append(Thread(target=lambda: wf_search(query)))
+  if includes['sf']:
+    threads.append(Thread(target=lambda: safeway_search(query)))
+  if includes['tc']:
+    threads.append(Thread(target=lambda: tc_search(query)))
+
   print('running...')
   for t in threads:
     t.start()
