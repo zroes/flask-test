@@ -202,4 +202,4 @@ def getData(query, includes):
   # albert_search('chicken')
   sortedResults = sorted(searchResults, key=lambda i:i['price'])
   print('done!')
-  return searchResults
+  return sortedResults

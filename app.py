@@ -1,8 +1,12 @@
 from flask import Flask, jsonify, request, render_template
-app = Flask(__name__)
+from flask_cors import CORS
 import scrape
 
-@app.route('/', methods=['GET', 'POST'])
+
+app = Flask(__name__)
+CORS(app)
+
+@app.route('/search', methods=['GET', 'POST'])
 def hello():
 
     # POST request
