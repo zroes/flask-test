@@ -24,6 +24,7 @@ def tj_search(query):
       'name': item.h3.text,
       'price': float(item.find(class_='ProductPrice_productPrice__price__3-50j').text[1:]),
       'size': item.find(class_='ProductPrice_productPrice__unit__2jvkA').text[1:],
+      'imgURL': baseurl + str(item.img).split('srcoriginal=')[1][2:].split('"')[0],
       'store': 'Trader Joe\'s'
     }
     searchResults.append(dict)
@@ -45,6 +46,7 @@ def albert_search(query):
       else item.find(class_='product-item-title-tooltip__inner').text.split(' - ')[0],
       'price': float(item.find(class_='product-price__saleprice').text.split('Y')[0][1:].split('/')[0]),
       'size': item.find(class_='product-title__name').text.split(' - ')[1],
+      'imgURL': str(item.img).split('src=')[1][3:].split('"')[0],
       'store': 'Albertsons'
     }
     searchResults.append(dict)
@@ -64,6 +66,7 @@ def meyer_search(query):
       'name': item.find(class_='kds-Text--l').text,
       'price': float(item.find(class_='kds-Price-promotional').text[1:]),
       'size': item.find(class_='text-neutral-more-prominent').text,
+      'imgURL': str(item.img).split(' src=')[1][1:].split('"')[0],
       'store': 'Fred Meyer'
     }
     searchResults.append(dict)
@@ -89,6 +92,7 @@ def wf_search(query):
       'size': item.find(class_='w-cms--font-body__sans-bold').text.split(', ')[1] 
         if len(item.find(class_='w-cms--font-body__sans-bold').text.split(', ')) > 1 
         else 'null',
+      'imgURL': str(item.img).split(' src=')[1][1:].split('"')[0],
       'store': 'Whole Foods'
     }
     searchResults.append(dict)
@@ -108,6 +112,7 @@ def safeway_search(query):
       else item.find(class_='product-title__name').text.split(' - ')[0],
       'price': float(item.find(class_='product-price__saleprice').text.split('Y')[0][1:]),
       'size': item.find(class_='product-title__name').text.split(' - ')[-1],
+      'imgURL': str(item.img).split('src=')[1][3:].split('"')[0],
       'store': 'Safeway'
     }
     searchResults.append(dict)
@@ -119,12 +124,13 @@ def tc_search(query):
   # print(response)
   soup = bs(response, 'html.parser')
   results = soup.find_all(class_='fp-item-content')
-
+  # print(results)
   for item in results[:10]:
     dict = {
       'name': item.find(class_='fp-item-name').text[1:-1],
       'price': float(item.find(class_='fp-item-base-price').text[1:]),
       'size': item.find(class_='fp-item-size').text,
+      'imgURL': str(item.img).split(' src=')[1][1:].split('"')[0],
       'store': 'Town and Country'
     }
     searchResults.append(dict)
@@ -155,7 +161,7 @@ def selenium_render_page(url, from_wf=False):
     modal.find_element(By.CLASS_NAME, 'w-makethismystore').click()
     sleep(0.1)
     driver.switch_to.alert.dismiss();
-  sleep(3.5)
+  sleep(4.5)
   r = driver.page_source
   return r
 
