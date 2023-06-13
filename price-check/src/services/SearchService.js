@@ -8,8 +8,10 @@ class SearchService {
 
   async search(params) {
     logger.log('loading...')
+    AppState.loading = true
     const res = await api.post('/search', params)
     logger.log('[RECEIVED DATA]', res.data)
+    AppState.loading = false
     AppState.searchResults = res.data.map(i => new Result(i))
   }
 }

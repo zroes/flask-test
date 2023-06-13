@@ -46,7 +46,7 @@ def albert_search(query):
       else item.find(class_='product-item-title-tooltip__inner').text.split(' - ')[0],
       'price': float(item.find(class_='product-price__saleprice').text.split('Y')[0][1:].split('/')[0]),
       'size': item.find(class_='product-title__name').text.split(' - ')[1],
-      'imgURL': str(item.img).split('src=')[1][3:].split('"')[0],
+      'imgURL': 'https://' + str(item.img).split('src=')[1][3:].split('"')[0],
       'store': 'Albertsons'
     }
     searchResults.append(dict)
@@ -112,7 +112,7 @@ def safeway_search(query):
       else item.find(class_='product-title__name').text.split(' - ')[0],
       'price': float(item.find(class_='product-price__saleprice').text.split('Y')[0][1:]),
       'size': item.find(class_='product-title__name').text.split(' - ')[-1],
-      'imgURL': str(item.img).split('src=')[1][3:].split('"')[0],
+      'imgURL': 'https://' + str(item.img).split('src=')[1][3:].split('"')[0],
       'store': 'Safeway'
     }
     searchResults.append(dict)
