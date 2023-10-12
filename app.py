@@ -13,6 +13,7 @@ def hello():
     if request.method == 'POST':
         print('Incoming..')
         # print(request.get_json())  # parse as JSON
+        print(request.get_json())
         query = request.get_json()['query']
         includes = request.get_json()['includes']
         results = scrape.getData(query, includes)

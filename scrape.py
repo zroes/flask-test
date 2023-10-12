@@ -59,7 +59,7 @@ def meyer_search(query):
   # print(response)
   soup = bs(response, 'html.parser')
   results = soup.find_all(class_='ProductCard')
-  # print(results)
+  print(results)
 
   for item in results[:10]:
     dict = {
@@ -139,13 +139,13 @@ def tc_search(query):
 def selenium_render_page(url, from_wf=False):
   # chrome_options = Options()
   # chrome_options.add_argument('--headless')
-  user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.82 Safari/537.36'
+  user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36'
   options = webdriver.ChromeOptions() 
 
   options.add_argument('--headless')
   options.add_argument(f'user-agent={user_agent}')
   driver = webdriver.Chrome(
-    # executable_path='chromedriver_mac_arm64/chromedriver', 
+    # executable_path='chromedriver_mac_arm64/chromedriver',
     options=options
   )
   driver.get(url)

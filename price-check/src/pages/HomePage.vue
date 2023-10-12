@@ -90,7 +90,7 @@ export default {
 
 <style scoped lang="scss">
 .size-img {
-  width: 100%;
+  max-width: 100%;
   max-height: 20vh;
 }
 </style>
